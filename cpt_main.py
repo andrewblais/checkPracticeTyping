@@ -134,7 +134,7 @@ class CheckPracticeTyping:
         """
         'About' button command, displays application information.
         """
-        messagebox.showinfo("About Check Type Speed", about_text, icon="info")
+        messagebox.showinfo("About Check/Practice Typing", about_text, icon="info")
 
     def color_mapping(self):
         """
@@ -311,7 +311,7 @@ class CheckPracticeTyping:
         """
         Sets up the entire GUI for the typing test.
         """
-        self.root.title("Check Type Speed")
+        self.root.title("Check/Practice Typing")
         self.root.iconbitmap("static/icon.ico")
         self.root.geometry(f"{self.gui_w}x{self.gui_h}+{self.move_x}+{self.move_y}")
         self.root.minsize(self.gui_w, self.gui_h)
@@ -322,7 +322,7 @@ class CheckPracticeTyping:
 
         # Title label widget:
         self.title_label = Label(self.root,
-                                 text="CHECK TYPE SPEED",
+                                 text="CHECK/PRACTICE TYPING",
                                  font=("Source Sans 3 Black", 16))
         self.title_label.grid(row=self.current_row,
                               column=0,
@@ -445,6 +445,10 @@ class CheckPracticeTyping:
 
 if __name__ == "__main__":
     window = Tk()
-    watermark_gui = CheckPracticeTyping(window, seconds=20, gui_w=950, gui_h=650, move_x=100,
+    watermark_gui = CheckPracticeTyping(window,
+                                        seconds=60,
+                                        gui_w=950,
+                                        gui_h=650,
+                                        move_x=100,
                                         move_y=0)
     window.mainloop()
