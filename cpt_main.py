@@ -4,13 +4,13 @@ from tkinter import *
 from tkinter import messagebox
 
 # Import local data:
-from static.cts_config import about_text, help_text, COLOR_MAP, COLORS
-from static.cts_long_sentences import long_sentences
-from static.cts_short_sentences import short_sentences
-from static.cts_words import words
+from static.cpt_config import about_text, help_text, COLOR_MAP, COLORS
+from static.cpt_long_sentences import long_sentences
+from static.cpt_short_sentences import short_sentences
+from static.cpt_words import words
 
 
-class CheckTypeSpeed:
+class CheckPracticeTyping:
     """
     Class to create a GUI for testing and improving the user's typing speed.
 
@@ -36,7 +36,7 @@ class CheckTypeSpeed:
         move_y (int): Y-coordinate for the initial window position.
         read_text (Label): Widget displaying the text for the user to copy during the typing test.
         read_text_next (str): Randomly selected word for the next typing test.
-        root (Tk): The root Tkinter window for the application.
+        root (Tk): The root Tkinter window for the applicatio
         entry_percent (float): Success rate calculated as the percentage of correct entries.
         num_entries (int): Total number of entries during the typing test.
         seconds (int): Initial value for the countdown timer in seconds.
@@ -74,7 +74,7 @@ class CheckTypeSpeed:
                  move_x: int = 0,
                  move_y: int = 0):
         """
-        Initialize `CheckTypeSpeed()` object with default values, sets up GUI.
+        Initialize `CheckPracticeTyping()` object with default values, sets up GUI.
 
         Args:
             root (Tk): The root Tkinter window.
@@ -445,6 +445,6 @@ class CheckTypeSpeed:
 
 if __name__ == "__main__":
     window = Tk()
-    watermark_gui = CheckTypeSpeed(window, seconds=20, gui_w=950, gui_h=650, move_x=100,
-                                   move_y=0)
+    watermark_gui = CheckPracticeTyping(window, seconds=20, gui_w=950, gui_h=650, move_x=100,
+                                        move_y=0)
     window.mainloop()
