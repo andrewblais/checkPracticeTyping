@@ -3,11 +3,12 @@ from random import choice
 from tkinter import *
 from tkinter import messagebox
 
-# Import local data:
+# Import data from `static` directory:
 from static.cpt_config import about_text, help_text, COLOR_MAP, COLORS
 from static.cpt_long_sentences import long_sentences
 from static.cpt_short_sentences import short_sentences
-from static.cpt_words import words
+from static.cpt_words_one import words_one
+from static.cpt_words_two import words_two
 
 
 class CheckPracticeTyping:
@@ -295,12 +296,14 @@ class CheckPracticeTyping:
         self.type_text_feedback.config(text=self.thumb, fg=self.thumb_color)
 
         # Length of entry based on time left:
-        if self.seconds > 30:
+        if self.seconds > 40:
             self.read_text_next = choice(long_sentences)
-        elif self.seconds > 15:
+        elif self.seconds > 25:
             self.read_text_next = choice(short_sentences)
+        elif self.seconds > 10:
+            self.read_text_next = choice(words_two)
         else:
-            self.read_text_next = choice(words)
+            self.read_text_next = choice(words_one)
 
         if self.counting_down:
             self.read_text.config(text=self.read_text_next)
