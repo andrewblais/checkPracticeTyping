@@ -18,11 +18,14 @@ https://github.com/andrewblais"""
 
 # Content for help popup:
 help_text = f"""\
-Look at the sentence or word in the top pane.\n
-Type exactly what you see in the bottom pane.\n
-Hit 'Enter'.\n
+A flashing cursor should appear in the blank field.\n
+If you don't see the flashing cursor, click in the blank field.\n
+The timer starts once you begin typing.\n
+Type the text you see in bold beneath the countdown timer.\n
+Hit 'Enter' to submit your entry.\n
+Type the next text that appears and hit 'Enter' again.\n
 Repeat.\n
-Get stats after 60 seconds.\n
+Get your typing stats after 60 seconds.\n
 Click 'Go again', 'Exit', or do absolutely nothing."""
 
 # Color map for determining countdown display color:
