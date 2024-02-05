@@ -78,7 +78,7 @@ class CheckPracticeTyping:
         Initialize `CheckPracticeTyping()` object with default values, sets up GUI.
 
         Args:
-            root (Tk): The root Tkinter window.
+            root (Tk): The root Tkinter window, required.
             gui_w (int): Width of the GUI window. Default is 480.
             gui_h (int): Height of the GUI window. Default is 640.
             move_x (int): X-coordinate for the initial window position. Default is 0.
@@ -94,13 +94,20 @@ class CheckPracticeTyping:
         self.y_padding = 75
         self.current_row = 0
 
-        # Tkinter widget attributes (in order of appearance):
+        # Tkinter widget attributes (in order of display):
+        # Row 1:
         self.title_label = None
+        # Row 2:
         self.countdown_label = None
+        # Row 3:
         self.read_text = None
+        # Row 4:
         self.type_text = None
+        # Row 5:
         self.type_text_feedback = None
+        # Row 6:
         self.go_again_button = None
+        # Row 7:
         self.help_button = None
         self.exit_button = None
         self.about_button = None
@@ -139,7 +146,11 @@ class CheckPracticeTyping:
 
     def color_mapping(self):
         """
-        Determines color of countdown label text based on second count.
+        Determines the color of the countdown label text based on the second count.
+
+        This method iterates through the COLOR_MAP dictionary to find the color
+        corresponding to the current number of seconds. It then updates the
+        countdown label text color accordingly.
         """
         for limit, color in COLOR_MAP.items():
             if self.seconds < limit:
@@ -148,7 +159,10 @@ class CheckPracticeTyping:
 
     def countdown_trigger(self):
         """
-        Triggers a continuation of the countdown for typing test.
+        Triggers a continuation of the countdown for the typing test.
+
+        This method sets the counting_down flag to True, indicating that the
+        countdown should continue. It then calls the countdown_update method.
         """
         if not self.counting_down:
             self.counting_down = True
@@ -157,6 +171,10 @@ class CheckPracticeTyping:
     def countdown_update(self):
         """
         Updates the countdown display during the typing test.
+
+        This method updates the countdown label's text and color based on the
+        current value of the seconds attribute. It also handles the logic of
+        decrementing the countdown and updating the GUI accordingly.
         """
         if self.counting_down:
             self.go_again_button.configure(state="disabled", cursor="")
@@ -164,13 +182,19 @@ class CheckPracticeTyping:
             # Specify color of countdown display:
             self.color_mapping()
 
+            # Redefine countdown display digits:
             countdown_display = f"{self.seconds:02}"
 
+            # Refresh `self.countdown_label`:
             self.countdown_label.config(text=countdown_display)
 
+            # Continue countdown if seconds is 1 or greater:
             if self.seconds > 0:
+                # Run `self.countdown_update()` every second:
                 self.root.after(1000, self.countdown_update)
+                # Subtract 1 from `self.seconds` every second:
                 self.seconds -= 1
+            # Countdown has reached 0:
             else:
                 self.counting_down = False
                 self.root.unbind("<Return>")  # Unbind <Return> key when countdown is 0
@@ -179,8 +203,12 @@ class CheckPracticeTyping:
                 self.read_text.configure(text="")
                 self.type_text.delete(0, END)
                 self.type_text.configure(state="disabled")
+
+                # Calculate and display Words Per Minute (WPM) statistics:
                 self.wpm_str = f"{self.words_correct} words per minute."
                 self.read_text.config(text=self.wpm_str, fg="dark green")
+
+                # Calculate and display typing accuracy percentages:
                 if self.entry_correct == 0:
                     self.entry_percent = 0
                 else:
@@ -191,6 +219,8 @@ class CheckPracticeTyping:
                 else:
                     self.word_accuracy_percent = round(
                         self.words_correct / self.total_words * 100)
+
+                # Display feedback on individual word accuracy and total entry correctness:
                 sentence_feedback = f"{self.word_accuracy_percent}% individual words correct.\n"
                 sentence_feedback += f"{self.entry_percent}% total entries correct."
                 self.type_text_feedback.config(text=sentence_feedback, fg="dark green")
@@ -199,32 +229,61 @@ class CheckPracticeTyping:
         """
         Private method.
         Resets various widgets to their initial state. Called by self.go_again().
+
+        This method is responsible for resetting the state of various widgets to
+        their initial conditions for a new typing round. It's called by the go_again
+        method.
         """
+        # Reset countdown label to initial state
         self.countdown_label.config(text=f"{self.seconds:02}", fg="black")
+
+        # Reset read text label to default color
         self.read_text.config(fg="black")
+
+        # Enable the type_text Entry widget and set its text variable
         self.type_text.configure(textvariable=self.text_var, state="normal")
+
+        # Reset thumb indicator text and color
         self.type_text_feedback.config(text=self.thumb, fg=self.thumb_color)
+
+        # Set focus to the type_text Entry widget
         self.type_text.focus_set()
+
+        # Bind the "Return" key to the user_entry method
         self.root.bind("<Return>", self.user_entry)
 
     def _reset_instance_attributes(self):
         """
         Private method.
         Ensures instance attributes are reset. Called by self.go_again().
+
+        This method resets the instance attributes to their initial values for a new
+        typing round. It's called by the go_again method.
         """
+        # Select a new random sentence for the user to type
         self.read_text_next = choice(long_sentences)
         self.read_text.configure(text=self.read_text_next)
+
+        # Reset countdown timer and related flags
         self.seconds = self.original_seconds
         self.counting_down = False
+
+        # Reset typing statistics
         self.total_words = 0
         self.words_correct = 0
         self.num_entries = 0
         self.entry_correct = 0
         self.entry_incorrect = 0
         self.entry_percent = 0
+
+        # Reset text variable for user input
         self.text_var = StringVar()
+
+        # Reset word accuracy and feedback attributes
         self.word_accuracy_percent = 0
         self.words_feedback = list()
+
+        # Reset display attributes
         self.wpm_str = ""
         self.thumb = "Type the phrase and hit 'Enter'"
         self.thumb_color = "black"
@@ -234,29 +293,49 @@ class CheckPracticeTyping:
         Private method.
         Calls self.countdown_trigger() whenever self.text_var is assigned a new value.
         Called by self.go_again().
+
+        This method uses Tkinter's trace method to call countdown_trigger whenever
+        self.text_var is assigned a new value. It's called by the go_again method.
         """
+        # Set up a trace on self.text_var to trigger self.countdown_trigger on write
         self.text_var.trace_add("write",
                                 lambda name, index, mode: self.countdown_trigger())
 
     def go_again(self):
         """
         Resets for a new typing round.
+
+        This method resets the GUI and instance attributes for a new typing round.
+        It's triggered by the 'Go again' button.
         """
+        # Reset instance attributes for a new typing round
         self._reset_instance_attributes()
+
+        # Reset various widgets to their initial state
         self._reset_widgets()
+
+        # Set up trace on self.text_var to trigger countdown on text change
         self._trace_text_var()
 
     @staticmethod
     def help_popup():
         """
         'Help' button command, displays help information.
+
+        This static method displays help information in a popup when the 'Help' button
+        is clicked.
         """
-        messagebox.showinfo("CTS Help", help_text, icon="question")
+        # Show a popup with help information
+        messagebox.showinfo("Check/Practice Typing Help", help_text, icon="question")
 
     def increment_row(self):
         """
         Increments the current row in the GUI layout.
+
+        This method increments the current_row attribute, facilitating the correct
+        placement of widgets in the GUI layout.
         """
+        # Increment the current row for proper widget placement
         self.current_row += 1
 
     def user_entry(self, event):
@@ -264,19 +343,33 @@ class CheckPracticeTyping:
         Handles user's typing input and updates typing statistics.
 
         Args:
-            event: The Tkinter event associated with user's input.
+            event: The Tkinter event associated with the user's input.
+
+        This method handles the user's typing input, updates typing statistics,
+        and triggers necessary actions based on the input event.
         """
+        # Get the text typed by the user and clear the input field
         typed_text = self.type_text.get()
         self.type_text.delete(0, END)
+
+        # Get the current text that the user is supposed to type
         current_text = self.read_text.cget("text")
+
+        # Split the current text into individual words
         current_text_split = current_text.split()
+
+        # Split the typed text into individual words
         typed_text_split = typed_text.split()
+
+        # Update total word count based on the current text
         self.total_words += len(current_text_split)
 
+        # Check how many words the user typed correctly
         for i in current_text_split:
             if i in typed_text_split:
                 self.words_correct += 1
 
+        # Check if the entire typed text matches the current text
         if typed_text == current_text:
             self.entry_correct += 1
             self.thumb = "✔"
@@ -286,16 +379,19 @@ class CheckPracticeTyping:
             self.thumb = "✖"
             self.thumb_color = COLORS["RED4"]
 
+        # Increment the total number of entries
         self.num_entries += 1
 
+        # Calculate entry correctness percentage
         if self.entry_correct == 0:
             self.entry_percent = 0
         else:
             self.entry_percent = f"{(self.entry_correct / self.num_entries * 100):.2f}"
 
+        # Update the thumb indicator based on correctness
         self.type_text_feedback.config(text=self.thumb, fg=self.thumb_color)
 
-        # Length of entry based on time left:
+        # Choose the next text for the user to type based on the remaining time
         if self.seconds > 40:
             self.read_text_next = choice(long_sentences)
         elif self.seconds > 25:
@@ -305,14 +401,20 @@ class CheckPracticeTyping:
         else:
             self.read_text_next = choice(words_one)
 
+        # Update the displayed text for the next typing round
         if self.counting_down:
             self.read_text.config(text=self.read_text_next)
+
+        # If the "Return" key was pressed, trigger the countdown
         if event.keysym == "Return":
             self.countdown_trigger()
 
     def setup_gui(self):
         """
         Sets up the entire GUI for the typing test.
+
+        This method configures and places all the widgets, buttons, and labels
+        to create the Check/Practice Typing GUI.
         """
         self.root.title("Check/Practice Typing")
         self.root.iconbitmap("static/icon.ico")
@@ -446,6 +548,7 @@ class CheckPracticeTyping:
                                pady=(65, 0))
 
 
+# Create an instance of `CheckPracticeTyping()` and RUN IT!:
 if __name__ == "__main__":
     window = Tk()
     watermark_gui = CheckPracticeTyping(window,
