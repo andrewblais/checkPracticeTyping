@@ -580,7 +580,7 @@ class CheckPracticeTyping:
 if __name__ == "__main__":
     window = Tk()
     watermark_gui = CheckPracticeTyping(window,
-                                        seconds=5,
+                                        seconds=60,
                                         gui_w=950,
                                         gui_h=650,
                                         move_x=100,
