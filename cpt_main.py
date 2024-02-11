@@ -443,7 +443,7 @@ class CheckPracticeTyping:
         self.root.title("Check/Practice Typing")
 
         # App favicon, comment out when creating .exe with PyInstaller:
-        self.root.iconbitmap("static/icon.ico")
+        # self.root.iconbitmap("static/icon.ico")
 
         self.root.geometry(f"{self.gui_w}x{self.gui_h}+{self.move_x}+{self.move_y}")
         self.root.minsize(self.gui_w, self.gui_h)
